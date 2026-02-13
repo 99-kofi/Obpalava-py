@@ -1,24 +1,36 @@
 from gradio_client import Client
 from .exceptions import ObalaPalavaError
+from .utils import validate_text
 
 DEFAULT_SPACE = "Willie999/obalapalava-demo"
+DEFAULT_API = "/translate_pidgin"
 
 class ObalaPalavaClient:
-    def __init__(self, space=DEFAULT_SPACE):
+    """
+    Python client for ObalaPalava hosted API
+    """
+
+    def __init__(self, space: str = DEFAULT_SPACE):
         try:
             self.client = Client(space)
         except Exception as e:
-            raise ObalaPalavaError(f"Failed to connect to ObalaPalava API: {e}")
+            raise ObalaPalavaError(
+                f"Could not connect to ObalaPalava Space '{space}': {e}"
+            )
 
     def translate(self, text: str):
-        if not text or not isinstance(text, str):
-            raise ObalaPalavaError("Input text must be a non-empty string")
-
+        """
+        Translate English ↔ Pidgin using hosted ObalaPalava API
+        """
         try:
+            text = validate_text(text)
+
             result = self.client.predict(
                 text=text,
-                api_name="/translate_pidgin"
+                api_name=DEFAULT_API
             )
+
             return result
+
         except Exception as e:
             raise ObalaPalavaError(f"Translation failed: {e}")
