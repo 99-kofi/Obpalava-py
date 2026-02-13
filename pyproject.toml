@@ -23,4 +23,3 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://obala-palava.vercel.app"
-Repository = "https://github.com/your-org/obalapalava"
